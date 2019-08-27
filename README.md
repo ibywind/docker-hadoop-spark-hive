@@ -16,7 +16,7 @@ docker-hadoop-spark-hive 快速构建你的大数据环境
 
 其中 hadoop , spark , hive 均可以在 我的windows 连接哦。很nice
 
-接下来 介绍一下 如何和使用
+接下来 介绍一下 如何使用
 
 ## 首先你需要安装docker 
 
@@ -27,7 +27,7 @@ sudo apt install docker.io
 ## 安装 docker-compose
 
 ```
-sudo apt install dokcer-compose
+sudo apt install docker-compose
 ```
 
 ## 开始你的表演
@@ -36,7 +36,7 @@ sudo apt install dokcer-compose
 # 进入 docker-compose.yml 的目录
 ./run.sh
 
-# 如果发现有没有成功启动的 容器 状态为 exited 
+# 如果发现存在没有成功启动的 容器 （状态为 exited ）
 docker ps -a
 
 # 手动重启下
