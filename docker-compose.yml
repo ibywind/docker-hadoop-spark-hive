@@ -63,3 +63,32 @@ services:
       - "8081:8081"
     env_file:
       - ./hadoop-hive.env
+  mysql-server:
+    image: mysql:5.7
+    container_name: mysql-server
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=zhangyang517
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  elasticsearch:
+    image: elasticsearch:6.5.3
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks: 
+      - es_network
+  kibana:
+    image: kibana:6.5.3
+    ports:
+      - "5601:5601"
+    networks: 
+      - es_network
+
+networks:
+  es_network:
+    external: true

@@ -5,7 +5,9 @@ docker-compose -f docker-compose.yml up -d datanode hive-metastore
 sleep 5
 docker-compose -f docker-compose.yml up -d hive-server
 docker-compose -f docker-compose.yml up -d spark-master spark-worker
-
+docker-compose -f docker-compose.yml up -d mysql-server
+docker-compose -f docker-compose.yml up -d elasticsearch
+docker-compose -f docker-compose.yml up -d kibana
 my_ip=`ip route get 1|awk '{print $NF;exit}'`
 echo "Namenode: http://${my_ip}:50070"
 echo "Datanode: http://${my_ip}:50075"
