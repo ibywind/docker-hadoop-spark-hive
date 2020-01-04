@@ -11,7 +11,28 @@ services:
       - ./hadoop-hive.env
     ports:
       - 50070:50070
-      - 8020:8020  
+      - 8020:8020
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:1.1.0-hadoop2.8-java8
+    container_name: resourcemanager
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8088:8088
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:1.1.0-hadoop2.8-java8
+    container_name: historyserver
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8188:8188
+
   datanode:
     image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
     depends_on: 
@@ -22,6 +43,18 @@ services:
       - ./hadoop-hive.env
     ports:
       - 50075:50075
+
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:1.1.0-hadoop2.8-java8
+    container_name: nodemanager
+    hostname: nodemanager
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8042:8042
+
   hive-server:
     image: bde2020/hive:2.1.0-postgresql-metastore
     container_name: hive-server
@@ -31,6 +64,7 @@ services:
       - "HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore"
     ports:
       - "10000:10000"
+
   hive-metastore:
     image: bde2020/hive:2.1.0-postgresql-metastore
     container_name: hive-metastore
@@ -39,20 +73,27 @@ services:
     command: /opt/hive/bin/hive --service metastore
     ports:
       - 9083:9083
+
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.1.0
     ports:
       - 5432:5432
     volumes:
       - ./data/postgresql/:/var/lib/postgresql/data
+
   spark-master:
     image: bde2020/spark-master:2.1.0-hadoop2.8-hive-java8
     container_name: spark-master
+    hostname: spark-master
+    volumes:
+      - ./copy-jar.sh:/copy-jar.sh
     ports:
       - 8080:8080
       - 7077:7077
     env_file:
       - ./hadoop-hive.env
+
+
   spark-worker:
     image: bde2020/spark-worker:2.1.0-hadoop2.8-hive-java8
     depends_on:
